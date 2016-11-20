@@ -1,0 +1,133 @@
+﻿body {
+    padding-top: 5px;
+    padding-bottom: 0px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+div {
+    display:inline-block; 
+    margin:5px;
+}
+#tableBlock {
+    width:auto;
+}
+#editBlock {
+    display:none;
+    float:right;
+}
+#createBlock {
+    float:right;
+}
+
+
+
+@import "compass/css3";
+
+body {
+  margin: 5px;
+}
+
+/* text recolor */
+h1, p, a {
+  color: #4DC9C9 !important;
+}
+
+/* button recolor */
+.nav-pills > li.active > a, .btn-primary {
+  background-color: #6C6C6C !important;
+  
+  border-color: #6C6C6C !important;
+  border-radius: 5px; 
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+body {
+            margin: 20px;
+            font-family: "Arial", "Helventica", sans-serif;
+        }
+
+        label {
+            width: 80px;
+            display: inline-block;
+        }
+
+        button {
+            display: inline-block;
+            outline: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            padding: .4em 1.1em .4em;
+            color: #fef4e9;
+            border: solid 1px #006fb9;
+            background: #1276bb;
+        }
+
+            button:hover {
+                text-decoration: none;
+                background: #282828;
+                border: solid 1px #000;
+            }
+
+        table {
+            padding-top: 1em;
+        }
+
+        thead, tfoot {
+            font-weight: 600;
+        }
+
+        th, td {
+            padding: .1em .5em;
+            text-align: left;
+        }
+
+            td li, td ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            td li {
+                display: inline;
+            }
+
+                td li::after {
+                    content: ',';
+                }
+
+                td li:last-child::after {
+                    content: '';
+                }
+                @import "compass/css3";
+
+body {
+  margin: 5px;
+}
+
+/* text recolor */
+h1, p, a {
+  color: #4DC9C9 !important;
+}
+
+/* button recolor */
+.nav-pills > li.active > a, .btn-primary {
+  background-color: #6C6C6C !important;
+  
+  border-color: #6C6C6C !important;
+  border-radius: 5px; 
+}

@@ -1,0 +1,308 @@
+﻿<div ng-controller="demoCtrl">
+    <div class="row">
+        <div>
+            <ul class="nav nav-pills nav-stacked">
+                <li ng-class="{ active: isSet(1) }">
+                    <a href ng-click="setTab(1)">Романы <span ng-bind="mas[0].count"></span></a>
+                </li>
+                <li ng-class="{ active: isSet(2) }">
+                    <a href ng-click="setTab(2)">Детективы <span ng-bind="mas[1].count"></span></a>
+                </li>
+                <li ng-class="{ active: isSet(3) }">
+                    <a href ng-click="setTab(3)">Фэнтези <span ng-bind="mas[2].count"></span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="body">
+        <div>
+            <h3>List of Books</h3>
+
+            <table>
+                <th style="display: none;">ID</th>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Year</th>
+                <th>PublisingHouse</th>
+                <tr ng-repeat="items in productsData">
+                    <td hidden="hidden">{{items.Id}}</td>
+                    <td>{{items.Name}}</td>
+                    <td>{{items.Author}}</td>
+                    <td>{{items.Year}}</td>
+                    <td>{{items.PublisingHouse}}</td>
+                    <td hidden="hidden">{{items.GenreId}}</td>
+                    <td>
+                        <button ng-model="$scope.Product"
+                                ng-click="edit(productsData[$index])">
+                            Edit
+                        </button>
+                        <button ng-click="delete($index)">Delete</button>
+                    </td>
+                </tr>
+            </table>
+            <div style="border-top: solid 2px #282828; width: 430px; height: 10px"> </div>
+
+            <div ng-show="Product.Id != '' ">
+                <div>
+                    <h2>Update Book</h2>
+                </div>
+                <div hidden="hidden">
+                    <label for="id">Id</label>
+                    <input type="text" data-ng-model="Product.Id" />
+                </div>
+                <div>
+                    <label for="name">Name</label>
+                    <input type="text" data-ng-model="Product.Name" />
+                </div>
+
+                <div>
+                    <label for="author">Author</label>
+                    <input type="text" data-ng-model="Product.Author" />
+                </div>
+
+                <div>
+                    <label for="year">Year</label>
+                    <input type="text" data-ng-model="Product.Year" />
+                </div>
+
+                <div>
+                    <label for="publishingHouse">PublishingHouse</label>
+                    <input type="text" data-ng-model="Product.PublishingHouse" />
+                </div>
+                <div>
+                    <label for="genre">Genre</label>
+                    <select id="editGenre" data-ng-model="Product.GenreId"><option value=1>Романы</option><option value=2>Детективы</option><option value=3>Фэнтези</option></select>
+                </div>
+                <br />
+                <div>
+                    <button data-ng-click="update()">Update</button>
+                    <button data-ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+
+            <div ng-hide="Product.Id != '' ">
+                <div>
+                    <h2>Add New Book</h2>
+                </div>
+                <div>
+                    <label for="name">Name</label>
+                    <input type="text" data-ng-model="Product.Name" />
+                </div>
+
+                <div>
+                    <label for="author">Author</label>
+                    <input type="text" data-ng-model="Product.Author" />
+                </div>
+
+                <div>
+                    <label for="year">Year</label>
+                    <input type="text" data-ng-model="Product.Year" />
+                </div>
+
+                <div>
+                    <label for="publishingHouse">PublishingHouse</label>
+                    <input type="text" data-ng-model="Product.PublishingHouse" />
+                </div>
+                <div>
+                    <label for="genre">Genre</label>
+                    <select id="addGenre"  data-ng-model="Product.GenreId"><option value=1>Романы</option><option value=2>Детективы</option><option value=3>Фэнтези</option></select>
+                </div>
+                <br />
+                <div>
+                    <button data-ng-click="save()">Save</button>
+                    <button data-ng-click="clear()">Clear</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    @section scripts
+{
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+        <script type="text/javascript">
+            // Defining angularjs module
+            var app = angular.module('MyApp', []);
+
+            // Defining angularjs Controller and injecting ProductsService
+            app.controller('demoCtrl', function ($scope, $http) {
+
+                $scope.prop = {
+                    "values": ["Романы", "Детективы", "Фэнтези"]
+                };
+
+                //$scope.productsData = null;
+                // Fetching records from the factory created at the bottom of the script file
+                /*ProductsService.GetAllRecords().then(function (d) {
+                    $scope.productsData = d.data; // Success
+                }, function () {
+                    alert('Error Occured !!!'); // Failed
+                });*/
+
+                $scope.Product = {
+                    Id: '',
+                    Name: '',
+                    Year: '',
+                    Author: '',
+                    PublishingHouse: '',
+                    GenreId: 1
+                };
+
+                // Reset product details
+                $scope.clear = function () {
+                    $scope.Product.Id = '';
+                    $scope.Product.Name = '';
+                    $scope.Product.Year = '';
+                    $scope.Product.Author = '';
+                    $scope.Product.PublishingHouse = '';
+                    $scope.Product.GenreId = 0;
+                }
+
+                //Add New Item
+                $scope.save = function () {
+                    if ($scope.Product.Name != "" &&
+                   $scope.Product.Year != "" && $scope.Product.Author != "" && $scope.Product.PublishingHouse != "" && $scope.Product.GenreId != 0) {
+
+
+
+
+                        //Http request using $http
+                        $http({
+                            method: 'POST',
+                            url: '/api/values',
+                            data: $scope.Product
+                        }).then(function successCallback(response) {
+                            // this callback will be called asynchronously
+                            // when the response is available
+                            //$scope.productsData.push(response.data);
+                            $scope.getBooksByActiveTab();
+                            $scope.getBooksByTab($scope.Product.GenreId);
+                            $scope.clear();
+                            alert("Product Added Successfully !!!");
+                        }, function errorCallback(response) {
+                            // called asynchronously if an error occurs
+                            // or server returns response with an error status.
+                            alert("Error : " + response.data.ExceptionMessage);
+                        });
+                    }
+                    else {
+                        alert('Please Enter All the Values !!');
+                    }
+                };
+
+                // Edit product details
+                $scope.edit = function (data) {
+                    $scope.Product = { Id: data.Id, Name: data.Name, Year: data.Year, Author: data.Author, PublishingHouse: data.PublishingHouse, GenreId: data.GenreId };
+                }
+
+                // Cancel product details
+                $scope.cancel = function () {
+                    $scope.clear();
+                }
+
+                // Update product details
+                $scope.update = function () {
+                    if ($scope.Product.Name != "" &&
+                   $scope.Product.Year != "" && $scope.Product.Author != "" && $scope.Product.PublishingHouse != "" && $scope.Product.GenreId != 0) {
+                        $http({
+                            method: 'PUT',
+                            url: '/api/values/' + $scope.Product.Id,
+                            data: $scope.Product
+                        }).then(function successCallback(response) {
+                            //$scope.productsData = response.data;
+                            $scope.getBooksByActiveTab();
+                            $scope.getBooksByTab($scope.Product.GenreId);
+                            $scope.clear();
+                            alert("Product Updated Successfully !!!");
+                        }, function errorCallback(response) {
+                            alert("Error : " + response.data.ExceptionMessage);
+                        });
+                    }
+                    else {
+                        alert('Please Enter All the Values !!');
+                    }
+                };
+
+                // Delete product details
+                $scope.delete = function (index) {
+                    $http({
+                        method: 'DELETE',
+                        url: '/api/values/' + $scope.productsData[index].Id,
+                    }).then(function successCallback(response) {
+                        //$scope.productsData.splice(index, 1);
+                        $scope.getBooksByActiveTab();
+                        alert("Product Deleted Successfully !!!");
+                    }, function errorCallback(response) {
+                        alert("Error : " + response.data.ExceptionMessage);
+                    });
+                };
+
+
+
+                // Here I have created a factory which is a popular way to create and configure services.
+
+                /*app.factory('ProductsService', function ($scope, $http) {
+                    var fac = {};
+                    fac.GetAllRecords = function () {
+                        return $http.get('/api/values');
+                    }
+                    return fac;
+                });*/
+                $scope.tab = 1;
+                $scope.mas = [a = { count: 0 }, b = { count: 0 }, c = { count: 0 }];
+                $scope.setTab = function (newTab) {
+                    $scope.tab = newTab;
+                    $scope.getBooksByActiveTab();
+                };
+
+                $scope.isSet = function (tabNum) {
+                    return $scope.tab === tabNum;
+                };
+
+                $scope.getBooksByActiveTab = function () {
+                    $http.get('/api/values/byGenre/' + $scope.tab).success(function (data, status, headers, config) {
+                        $scope.productsData = data;
+                        $scope.books = data;
+                        $scope.mas[$scope.tab - 1].count = $scope.productsData.length;
+                    }).error(function (data, status, headers, config) {
+                        alert("Error");
+                    });
+                };
+
+                $scope.getBooksByTab = function (tabNum) {
+                    $http.get('/api/values/byGenre/' + tabNum).success(function (data, status, headers, config) {
+                        $scope.mas[tabNum - 1].count = data.length;
+                    }).error(function (data, status, headers, config) {
+                        alert("Error");
+                    });
+                };
+                $scope.getBooksByTab(3);
+                $scope.getBooksByTab(2);
+                $scope.getBooksByActiveTab();
+            });
+
+            /*app.controller('TabController', function ($scope, $http) {
+                $scope.tab = 1;
+                $scope.mas = [a = { count: 0 }, b = { count: 0 }, c = { count: 0 }];
+                $scope.setTab = function (newTab) {
+                    $scope.tab = newTab;
+                    $scope.getBooksByActiveTab();
+                };
+
+                $scope.isSet = function (tabNum) {
+                    return $scope.tab === tabNum;
+                };
+
+                $scope.getBooksByActiveTab = function () {
+                    $http.get('/api/values/byGenre/' + $scope.tab).success(function (data, status, headers, config) {
+                        $scope.productsData = data;
+                        $scope.books = data;
+                        $scope.mas[$scope.tab - 1].count = $scope.books.length;
+                    }).error(function (data, status, headers, config) {
+                        alert("Error");
+                    });
+                };
+            });*/
+
+        </script>
+
+    }
